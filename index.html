@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #5a72b6;
+}
+
+header {
+  background-color: #4b2df5;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.column {
+  flex-basis: 48%;
+  margin-bottom: 20px;
+}
+
+.column h2 {
+  margin-bottom: 10px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.low_thresh {
+  margin-left: 42px;
+}
+.threshold{
+  margin-left: 25px;
+}
+.Filter{
+  margin-left: 60px;
+}
+.region_based{
+  margin-left: 76px;
+}
+.compression{
+  margin-left: 20px;
+}
+.quality{
+  margin-left: 100px;
+}
+.Top{
+  margin-left: 102px;
+}
+.Left{
+  margin-left: 142px;
+}
+.Right{
+  margin-left: 143px;
+}
+.Bottom{
+  margin-left: 97px;
+}
+.row .column .choose-img {
+  background: #6C757D;
+  border: 1px solid #6C757D;
+}
+label {
+  margin-bottom: 5px;
+}
+.preview-img img{
+  max-width: 490px;
+  max-height: 335px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+select, button {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input[type="text"] {
+  padding: 5px;
+  
+  border-radius: 5px;
+  display: inline-block;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #6C757D;
+}
+
+button[type="submit"] {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+#corlarization2{
+  background-color: #41103c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+#restore2{
+  background-color: #fa0303;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 600px;
+}
+#corlarization2:hover{
+  background-color: #0414fa;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+#restore2:hover{
+  background-color: #1303fa;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button[id="save"] {
+  background-color: #db3f18;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button[id="save"]:hover {
+  background-color: #090df5;
+}
+
+button[type="submit"]:hover {
+  background-color: #1504fd;
+}
+
+.output-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+.image-container {
+  text-align: center;
+}
+
+.colorized-image {
+  max-width: 100%;
+  margin-top: 20px;
+}
+  </style>
+<head>
+  <title>Image Colorization</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header>
+    <h1>Image Colorization</h1>
+  </header>
+  <main>
+    <div class="row">
+      <div class="column">
+        <h2>Uploaded Image</h2>
+        <div class="preview-img">
+          <img src="static/images/image-placeholder.svg" id = "preview"  alt="preview-img">
+          <img class="preview-save" id="saved-image" src="static/images/image-placeholder.svg" alt="Saved Image">
+
+
+      </div>
+      </div>
+      <div class="column">
+        <h2>Image Processing Options</h2>
+        
+        <form id="id1" action="/compare" method="POST" enctype="multipart/form-data">
+          <input  class="w3-button " type="file" name="image1" onchange="previewImage(event)">
+          <button id="id2" class="w3-button w3-black " type="submit">Upload</button>
+       
+        </form>
+          
+          <label for="filter-select">Image Filter:</label>
+          
+          
+       
+        <form id="blur1" action="/blurapi" method="POST" >
+          <div>
+          <label for="input">Kernal Size(e.g:25):</label>
+          <input type="text" name="image1" id="input" class = "Filter">
+          <button id="blur2" type="submit">Blur</button>
+        </div>
+        </form>
+        <form id="sharpen1" action="/sharpenapi" method="POST" >
+          <div>
+            <label for="input">Kernal Size(e.g:25):</label>
+          <input type="text" name="image1" id="input" class = "Filter">
+          <button id="sharpen2" type="submit">Sharpen</button>
+        </div>
+        </form>
+          
+        <form id="edge-detection1" action="/detect_edges" method="POST" >
+          <div>
+          <label for="input">Kernal Size(e.g:03):</label>
+          <input type="text" name="image1" id="input" class = "Filter">
+          <button id="edge-detection2" type="submit">Edge Detection</button>
+        </div>
+        </form>
+          
+          <label for="segmentation-select">Image Segmentation:</label>
+          <form id="threshold1" action="/threshold" method="POST" >
+            <div>
+            <label for="input">threshold value(e.g:240):</label>
+            <input type="text" name="image1" id="input" class="threshold">
+            <button id="threshold2" type="submit">Thresholding</button>
+          </div>
+          </form>
+            <form id="Edgebased1" action="/edge_based_threshold" method="POST" >
+              <div>
+              <label for="input">Low threshold(e.g:80):</label>
+              <input type="text" name="input1" id="input" class="low_thresh">
+              <br>
+              <label for="input">high threshold(e.g:99):</label>
+              <input type="text" name="input2" id="input" class="low_thresh">
+              <button id="Edgebased2" type="submit">Edge-based Seg</button>
+            </div>
+            </form>
+           
+            <form id="Regionbased1" action="/region_based_threshold" method="POST" >
+              <div>
+              <label for="input">Blocksize(e.g:15):</label>
+              <input type="text" name="input1" id="input" class="region_based">
+              <br>
+              <label for="input">Constant (e.g:05):</label>
+              <input type="text" name="input2" id="input" class="region_based">
+              <button id="Regionbased2" type="submit">Region-based Seg</button>
+            </div>
+            </form>
+
+          <label for="compression-select">Image Compression:</label>
+            <form id="ImageCompression1" action="/lossy_compression" method="POST" >
+              <div>
+              <label for="input">quality(e.g:25):</label>
+              <input type="text" name="image1" id="input" class="quality">
+              <button id="ImageCompression2" type="submit">Lossy Compression</button>
+            </div>
+            </form>
+            <form id="losslessCompression1" action="/lossless_compression" method="POST" >
+              <div>
+              <label for="input">compression level(e.g:50):</label>
+              <input type="text" name="image1" id="input" class="compression">
+              <button id="losslessCompression2" type="submit">Lossless Compression</button>
+            </div>
+            </form>
+
+            <label for="transformation">Image Transformation</label>
+            <div>
+              <label for="transformation"> Crop Image:</label>
+            </div>
+            <form id="crop1" action="/croping_image" method="POST" >
+              <div>
+                <label for="input">X(e.g:10):</label>
+              <input type="text" name="Left" id="input" class="Left">
+              </div>
+              <div>
+                <label for="input">Y(e.g:10):</label>
+              <input type="text" name="Right" id="input" class="Right">
+              </div>
+              <div>
+                <label for="input">Width(e.g:250):</label>
+              <input type="text" name="Top" id="input" class="Top">
+              </div>
+              <div>
+              <label for="input">Height(e.g:250):</label>
+              <input type="text" name="Bottom" id="input" class="Bottom">
+              <button id="crop2" type="submit">Crop</button>
+            </div>
+            </form>
+            <label for="transformation">Image Rotatation</label>
+            <div>
+            <form id="Rotateleft1" action="/rotate_left_image" method="POST" >
+              <button id="Rotateleft2" type="submit">Rotate Left</button>
+            </form>
+            <form id="Rotateright1" action="/rotate_right_image" method="POST" >
+              <button id="Rotateright2" type="submit">Rotate Right</button>
+            </form>
+            <form id="Rotatetop1" action="/rotate_top_image" method="POST" >
+              <button id="Rotatetop2" type="submit">Rotate Top</button>
+            </form>
+            <form id="Rotatebottom1" action="/rotate_bottom_image" method="POST" >
+              <button id="Rotatebottom2" type="submit">Rotate Bottom</button>
+            </form>
+          </div>
+
+         
+          <form id="corlarization1" action="/colarization" method="POST" >
+        
+            <button id="corlarization2" type="submit">Apply Colarization</button>
+        
+          </form>
+          
+          <form id="restore1" action="/restore_changes" method="POST" >
+            <div>
+            <button id="restore2" type="submit">Restore All Changes</button>
+          </div>
+          </form>
+       
+        
+
+        <div class="output-options">
+          <button class="save-img1" id="save">Save as JPG</button>
+          <button class="save-img2" id="save">Save as PNG</button>
+          <button class="save-img3" id="save">Save as TIFF</button>
+        </div>
+      </div>
+    </div>
+    
+   
+  </main>
+
+  <script>
+    const input1 = document.querySelector(".file-input"); // for user selected file
+const input2 = document.querySelector(".choose-img"); // for user selected image
+const input3 = document.querySelector(".preview-img img"); //to load iamge for previewing
+var blurButton = document.getElementById("blur2");
+var uploadButton = document.getElementById("id2");
+var sharpenButton = document.getElementById("sharpen2");
+var edgeButton = document.getElementById("edge-detection2");
+var thresholdButton = document.getElementById("threshold2");
+var edgebaseButton = document.getElementById("Edgebased2");
+var regionbasedButton = document.getElementById("Regionbased2");
+var lossyButton = document.getElementById("ImageCompression2");
+var losslessButton = document.getElementById("losslessCompression2");
+var colorizationButton = document.getElementById("corlarization2");
+var savedImage = document.getElementById("saved-image");
+var cropiamge = document.getElementById("crop2");
+var leftiamge = document.getElementById("Rotateleft2");
+var rightiamge = document.getElementById("Rotateright2");
+var topiamge = document.getElementById("Rotatetop2");
+var bottomiamge = document.getElementById("Rotatebottom2");
+const preview_image = document.querySelector(".preview-save");  
+const save_image_jpg = document.querySelector(".save-img1");   
+const save_image_png = document.querySelector(".save-img2"); 
+const save_image_tiff = document.querySelector(".save-img3"); 
+const restorebutton = document.getElementById("restore2"); 
+const jpg_imageSavingFunction = () => {
+  let canv = document.createElement('canvas');
+  const context = canv.getContext('2d');
+  canv.width = preview_image.naturalWidth;
+  canv.height = preview_image.naturalHeight;
+  context.translate(canv.width / 2, canv.height / 2);
+  context.drawImage(preview_image, -canv.width / 2, -canv.height / 2, canv.width, canv.height);
+  const link = document.createElement("a");
+    link.download = "image.jpg";
+    link.href = canv.toDataURL();
+    link.click();
+
+}
+
+const png_imageSavingFunction = () => {
+  let canv = document.createElement('canvas');
+  const context = canv.getContext('2d');
+  canv.width = preview_image.naturalWidth;
+  canv.height = preview_image.naturalHeight;
+  context.translate(canv.width / 2, canv.height / 2);
+  context.drawImage(preview_image, -canv.width / 2, -canv.height / 2, canv.width, canv.height);
+  const link = document.createElement("a");
+    link.download = "image.png";
+    link.href = canv.toDataURL();
+    link.click();
+
+}
+
+const tiff_imageSavingFunction = () => {
+  let canv = document.createElement('canvas');
+  const context = canv.getContext('2d');
+  canv.width = preview_image.naturalWidth;
+  canv.height = preview_image.naturalHeight;
+  context.translate(canv.width / 2, canv.height / 2);
+  context.drawImage(preview_image, -canv.width / 2, -canv.height / 2, canv.width, canv.height);
+  const link = document.createElement("a");
+    link.download = "image.tiff";
+    link.href = canv.toDataURL();
+    link.click();
+
+}
+
+
+const imageLoadingFunction = () => { //image loader function
+  const form1 = document.getElementById('id1');
+  console.log(form1)
+      form1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form1);
+      const response = await fetch('/compare', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      console.log("kgkkf",result)
+    });
+  }
+// input1.addEventListener("change", imageLoadingFunction);
+// input2.addEventListener("click", () => input1.click());
+const apply_blur = () => { //image loader function
+  const button1 = document.getElementById('blur1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/blurapi', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      console.log("ggggg",result)
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_sharpen = () => { //image loader function
+  const button1 = document.getElementById('sharpen1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/sharpenapi', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      console.log("sharpen1",result)
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_edges = () => { //image loader function
+  const button1 = document.getElementById('edge-detection1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/detect_edges', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      console.log("ggggg",result)
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  
+  const apply_restore_changes = () => { //image loader function
+  const button1 = document.getElementById('restore1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/restore_changes', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.text;
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_thresh = () => { //image loader function
+  const button1 = document.getElementById('threshold1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/threshold', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_left_rotate = () => { //image loader function
+  const button1 = document.getElementById('Rotateleft1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/rotate_left_image', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.text;
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_right_rotate = () => { //image loader function
+  const button1 = document.getElementById('Rotateright1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/rotate_right_image', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.text;
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_top_rotate = () => { //image loader function
+  const button1 = document.getElementById('Rotatetop1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/rotate_top_image', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.text;
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_bottom_rotate = () => { //image loader function
+  const button1 = document.getElementById('Rotatebottom1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/rotate_bottom_image', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.text;
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_thresh_edgebased = () => { //image loader function
+  const button1 = document.getElementById('Edgebased1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/edge_based_threshold', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_thresh_regionbased = () => { //image loader function
+  const button1 = document.getElementById('Regionbased1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/region_based_threshold', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+
+  const apply_lossy_compression = () => { //image loader function
+  const button1 = document.getElementById('ImageCompression1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/lossy_compression', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_lossless_compression = () => { //image loader function
+  const button1 = document.getElementById('losslessCompression1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/lossless_compression', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+  
+  const apply_thresh_crop_image = () => { //image loader function
+  const button1 = document.getElementById('crop1');
+  console.log(button1)
+    button1.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(button1);
+      const response = await fetch('/croping_image', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.text;
+      if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+  }
+
+  const apply_colorization = () => {
+  const button1 = document.getElementById('corlarization1');
+  console.log(button1)
+  button1.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(button1);
+    const response = await fetch('/colarization', {
+      method: 'POST',
+      body: formData,
+    });
+    const result = await response.json();
+    if (result) {
+      console.log(result)
+      savedImage.src = "{{ url_for('static', filename='images/final.jpg') }}";
+    }
+  });
+};
+
+  function updateImage() {
+    const preview = document.getElementById("saved-image");
+    preview.src = "{{ url_for('static', filename='images/final.jpg') }}";
+  }
+
+
+  async function  previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("preview");
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+        preview.src = e.target.result;
+        console.log( file,"---")
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "";
+    }
+    
+    const formData = new FormData();
+      formData.append('image1', file);
+    event.preventDefault();
+      const response = await fetch('/convert', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+      preview.src =  "{{ url_for('static', filename='images/input.jpg') }}";
+    }
+
+
+    
+
+    
+    // event listeners for  for function calling
+    save_image_jpg.addEventListener("click", jpg_imageSavingFunction); 
+    save_image_png.addEventListener("click", png_imageSavingFunction);
+    save_image_tiff.addEventListener("click", tiff_imageSavingFunction);
+    
+
+    leftiamge.addEventListener("click",apply_left_rotate);
+    rightiamge.addEventListener("click",apply_right_rotate);
+    topiamge.addEventListener("click",apply_top_rotate);
+    bottomiamge.addEventListener("click",apply_bottom_rotate);
+    
+    lossyButton.addEventListener("click",apply_lossy_compression);
+    losslessButton.addEventListener("click",apply_lossless_compression);
+    colorizationButton.addEventListener("click",apply_colorization);
+    edgebaseButton.addEventListener("click",apply_thresh_edgebased);
+    cropiamge.addEventListener("click",apply_thresh_crop_image);
+
+    regionbasedButton.addEventListener("click",apply_thresh_regionbased);
+    thresholdButton.addEventListener("click",apply_thresh);
+    blurButton.addEventListener("click",apply_blur);
+    edgeButton.addEventListener("click",apply_edges);
+    sharpenButton.addEventListener("click",apply_sharpen);
+    uploadButton.addEventListener("click",imageLoadingFunction);
+    restorebutton.addEventListener("click", apply_restore_changes);
+  </script>
+</body>
+</html>
